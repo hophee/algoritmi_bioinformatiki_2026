@@ -1,0 +1,119 @@
+library(RColorBrewer)
+library(ComplexHeatmap)
+library(circlize)
+library(ggplot2)
+library(data.table)
+library(limma)
+library(umap)
+library(Biobase)
+library(DESeq2)
+library(pvca)
+
+phen <- read.delim("subject_data.txt")
+
+eset <- fread("matrix_protein.csv",data.table = F)
+rownames(eset) <- eset$V1
+eset <- eset[,-1]
+
+table(phen$AGE)
+table(phen$SEX)
+table(phen$SEX, phen$AGE)
+table(phen$DTHHRDY)
+table(phen$AGE,phen$DTHHRDY)
+
+
+
+phen <- data.frame(subjid = phen$SUBJID,
+                   gender = phen$SEX,
+                   age = phen$AGE,
+                   hardy = phen$DTHHRDY
+)
+
+tt <- vst(data.matrix(eset))
+
+# фильтрация генов по дисперсии
+
+vr <- apply(tt,1,var)
+vr <- sort(vr, decreasing = T)
+nm <- names(vr)[1:500]
+tt.filt <- tt[rownames(tt) %in% nm,]
+
+
+
+
+ha <- HeatmapAnnotation(
+  gender = phen$gender,
+  hardy = phen$hardy,
+  age = phen$age,
+  col = list(
+             age = c("20-29" = "red", "30-39" = "red4", "40-49" = "green",
+                     "50-59" = "green4", "60-69" = "blue", "70-79" = "blue4"),
+             gender = c("M" = "purple", "F" = "cyan"),
+             hardy = c("H0" = "red", "H1" = "cyan","H2" = "dodgerblue",
+                       "H3" = "blue","H4" = "blue4")
+             )
+)
+
+
+
+col.dist <- as.dist((1-cor(tt.filt))/2)
+row.dist <- as.dist((1-cor(t(tt.filt)))/2)
+row_dend <- hclust(row.dist, method = "ward.D2")
+col_dend <- hclust(col.dist, method = "ward.D2")
+
+tt.scaled <- t(scale(t(tt.filt)))
+
+#rbpal <- colorRampPalette(brewer.pal(10, "RdBu"))(256)
+#rbpal <- rev(rbpal)
+
+Heatmap(tt.scaled, show_row_names = F, show_column_names = F,
+        # col=rbpal,
+        cluster_rows = row_dend,
+        cluster_columns = col_dend,
+        column_dend_height = unit(2, "cm"),
+        row_dend_width = unit(2, "cm"),
+        column_split = 4,
+        row_split = 3,
+        border = TRUE,
+        top_annotation = ha,
+        show_heatmap_legend = F,
+        use_raster = F
+)
+
+my_config <- umap.defaults
+#my_config$n_neighbors <- 5
+
+umap_results <- umap(t(tt.scaled),config = my_config)
+umap_df <- as.data.frame(umap_results$layout)
+colnames(umap_df) <- c("UMAP1", "UMAP2")
+umap_df <- cbind(umap_df, phen)
+umap_df$group <- paste(umap_df$gender, umap_df$hardy,sep="_")
+
+ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = hardy)) +
+  geom_point(size = 3, alpha = 0.8) +
+  theme_minimal() +
+  labs(title = "UMAP: RNA-seq Samples",
+       x = "UMAP Dimension 1",
+       y = "UMAP Dimension 2")
+
+
+# оценка факторов, влияющих на дисперсию
+
+rownames(phen) <- phen$subjid
+eset <- ExpressionSet(assayData = tt.filt,
+                      phenoData=AnnotatedDataFrame(phen))
+pvcaObj <- pvcaBatchAssess(eset, 
+                           batch.factors = c("gender", "age", "hardy"), 
+                           threshold = 0.4)
+
+plot_df <- data.frame(factor = pvcaObj$label, variance = pvcaObj$dat[1,])
+ggplot(plot_df, aes(x = factor, y = variance)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  theme_minimal() +
+  labs(title = "Variance Explained by Factors", y = "Portion of Variance")
+
+tb<-xtabs( ~ age + gender +  hardy, data=phen)
+ftable(tb)
+table(phen$age)
+table(phen$hardy)
+

@@ -1,0 +1,84 @@
+library(data.table)
+library(edgeR)
+library(limma)
+library(biomaRt)
+
+rna <- fread("GTEx_Analysis_2025-08-22_v11_RNASeQCv2.4.3_gene_reads.gct",
+             data.table = F)
+
+sample.attr <- read.delim("GTEx_Analysis_v11_Annotations_SampleAttributesDS.txt")
+sbj.phen <- read.delim("GTEx_Analysis_v11_Annotations_SubjectPhenotypesDS.txt")
+
+sbj.phen <- na.omit(sbj.phen)
+
+sample.attr <- sample.attr[sample.attr$SAMPID %in% colnames(rna),]
+sample.attr <- sample.attr[sample.attr$SMTSD == "Liver",]
+
+sampid <- gregexpr("-",sample.attr$SAMPID, fixed = T)
+i <- sapply(sampid,function(x) x[2])
+sample.attr$SUBJID <- substr(sample.attr$SAMPID,1,i-1)
+
+sbj.phen <- sbj.phen[sbj.phen$SUBJID %in% sample.attr$SUBJID,]
+sample.attr <- sample.attr[sample.attr$SUBJID %in% sbj.phen$SUBJID,]
+
+genes <- rna[,1:2]
+rna <- rna[,-c(1,2)]
+rownames(rna) <- genes$Name
+rna <- rna[,colnames(rna) %in% sample.attr$SAMPID]
+
+i<-match(colnames(rna),sample.attr$SAMPID)
+sample.attr<-sample.attr[i,]
+sum(colnames(rna)==sample.attr$SAMPID)
+
+i<-match(sample.attr$SUBJID,sbj.phen$SUBJID)
+sbj.phen<-sbj.phen[i,]
+sum(sbj.phen$SUBJID==sample.attr$SUBJID)
+
+colnames(rna) <- sbj.phen$SUBJID
+
+sbj.phen$SEX <- ifelse(sbj.phen$SEX == 1, "M", "F")
+sbj.phen$DTHHRDY <- paste("H",sbj.phen$DTHHRDY,sep = "")
+
+write.table(sample.attr,file="sample_data.txt", row.names=F,sep='\t',quote=FALSE)
+write.table(sbj.phen,file="subject_data.txt", row.names=F,sep='\t',quote=FALSE)
+
+
+rna <-  DGEList(counts=rna, genes=rownames(rna))
+
+keep <- filterByExpr(rna)
+rna <- rna[keep,]
+dim(rna)
+
+genes <- rna$genes$genes
+
+genes <- sapply(1:length(genes), function(x) strsplit(genes[x],split = ".", fixed = T)[[1]][1])
+
+ensembl <- useEnsembl(biomart = "genes", dataset = "hsapiens_gene_ensembl")
+
+xx<-getBM(attributes=c('hgnc_symbol',
+                       'ensembl_gene_id',
+                       "entrezgene_id",
+                       "description",
+                       "gene_biotype"), 
+          filters = 'ensembl_gene_id', 
+          values = genes,
+          mart = ensembl)
+xx <- xx[xx$gene_biotype == "protein_coding",]
+xx <- xx[!is.na(xx$entrezgene_id),]
+xx <- xx[xx$hgnc_symbol!="",]
+
+keep <- genes %in% xx$ensembl_gene_id
+rna <- rna[keep,]
+dim(rna)
+
+rna<- calcNormFactors(rna)
+eset<-rna$counts
+rownames(eset) <- rna$genes$genes
+
+nm <- rownames(eset)
+
+nm <- sapply(1:length(nm), function(x) strsplit(nm[x],split = ".", fixed = T)[[1]][1])
+rownames(eset) <- nm
+
+
+fwrite(as.data.frame(eset),file="matrix_protein.csv",row.names=T)

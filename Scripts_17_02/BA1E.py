@@ -1,5 +1,6 @@
+#Find Patterns Forming Clumps in a String
 def find_clumps(genome, k, L, t):
-    clumps = set()  # ← CHANGE THIS from [] to set()
+    clumps = set()
     n = len(genome)
     
     for i in range(n - L + 1):

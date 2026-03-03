@@ -62,7 +62,7 @@ def reverse_complement(dna):
     return ''.join(comp[::-1])
 
 
-#new
+#neww
 def count_d(text, pattern, d):
     k = len(pattern)
     return sum(

@@ -1,5 +1,5 @@
 # Find Frequent Words with Mismatches and Reverse complements
-
+import time
 alphabet   = ('A', 'C', 'G', 'T')
 
 def hamming_dist(s1, s2):
@@ -69,6 +69,22 @@ def count_d(text, pattern, d):
         1 for i in range(len(text) - k + 1)
         if hamming_dist(text[i:i+k], pattern) <= d
     )
+
+
+def new_frequent_words_mismatches_rc(text, k, d):
+    freq = [0] * (4**k)
+    for i in range(len(text) - k + 1):
+        kmer = text[i:i+k]
+        for p in neighbors(kmer, d):
+            freq[PatternToNumber(p)] += 1
+        for p in neighbors(reverse_complement(kmer), d):
+            freq[PatternToNumber(p)] += 1
+
+    max_freq = max(freq)
+    return [NumberToPattern(i, k) for i in range(len(freq)) if freq[i] == max_freq]
+
+
+
 def frequent_words_mismatches_rc(text, k, d):
     candidates = set()
     for i in range(len(text) - k + 1):
@@ -90,11 +106,22 @@ with open(filename) as f:
     lines = [line.rstrip() for line in f]
 text    = lines[0]
 k, d    = map(int, lines[1].split())
-# text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
-# k, d = 4, 1
+#text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
+#k, d = 4, 1
 
-result = frequent_words_mismatches_rc(text, k, d)
+#result = frequent_words_mismatches_rc(text, k, d)
+start1 = time.time()
+print(frequent_words_mismatches_rc(text, k, d))
+end1 = time.time()
+elapsed_time = end1 - start1
+print(f"Elapsed time: {elapsed_time} seconds")
+
+start2 = time.time()
+print(new_frequent_words_mismatches_rc(text, k, d))
+end2 = time.time()
+elapsed_time2 = end2 - start2
+print(f"Elapsed time: {elapsed_time2} seconds")
 #print(result)
-with open("res_ba1j.txt", "w") as f:
-    f.write(' '.join(result))
-    f.write('\n')
+#with open("res_ba1j.txt", "w") as f:
+#    f.write(' '.join(result))
+#   f.write('\n')

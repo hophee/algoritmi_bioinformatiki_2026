@@ -1,3 +1,6 @@
+# Find a Median String
+# rosalind.info/problems/ba2b/
+
 alphabet = ('A', 'C', 'G', 'T')
 
 

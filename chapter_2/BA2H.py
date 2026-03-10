@@ -1,3 +1,6 @@
+# Implement DistanceBetweenPatternAndStrings
+# rosalind.info/problems/ba2h/
+
 alphabet = ('A', 'C', 'G', 'T')
 
 

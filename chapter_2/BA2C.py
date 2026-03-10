@@ -1,12 +1,7 @@
+# Find a Profile-most Probable k-mer in a String
+# rosalind.info/problems/ba2c/
+
 alphabet = ('A', 'C', 'G', 'T')
-
-
-def hamming_dist(s1, s2):
-    ham_dist = 0
-    for i in range(len(s1)):
-        if s1[i] != s2[i]: ham_dist += 1
-    return ham_dist
-
 
 def pr_kmer(kmer, profile):
     p = 1.0

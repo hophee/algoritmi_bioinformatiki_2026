@@ -1,3 +1,5 @@
+# Implement MotifEnumeration
+# rosalind.info/problems/ba2a/
 alphabet = ('A', 'C', 'G', 'T')
 
 

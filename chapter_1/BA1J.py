@@ -34,7 +34,7 @@ def NumberToPattern(n, k):
     return prefPattern+symbol
 
 
-def neighbors(pattern: str, d: int) -> set[str]:
+def neighbors(pattern, d):
     if d == 0:
         return {pattern}
     if len(pattern) == 1:

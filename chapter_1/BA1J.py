@@ -122,6 +122,6 @@ end2 = time.time()
 elapsed_time2 = end2 - start2
 print(f"Elapsed time: {elapsed_time2} seconds")
 #print(result)
-#with open("res_ba1j.txt", "w") as f:
+#with open("results_store/res_ba1j.txt", "w") as f:
 #    f.write(' '.join(result))
 #   f.write('\n')

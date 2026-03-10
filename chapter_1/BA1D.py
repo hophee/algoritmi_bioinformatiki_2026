@@ -12,5 +12,5 @@ for i in range(len(string)):
         res.append(i)
 
 result = ' '.join(map(str, res))
-with open("BA1D_res.txt", "w") as f:
+with open("results_store/BA1D_res.txt", "w") as f:
     f.write(result)

@@ -27,6 +27,6 @@ dna = lines[0]
 k = int(lines[1])
 
 
-with open("/home/iz-user/Downloads/res_ba1k.txt", "w") as f:
+with open(input(), "w") as f:
     f.write(' '.join(map(str, get_freq_array(dna, k))))
     f.write("\n")

@@ -35,7 +35,7 @@ with open(filename) as file:
 dna = lines[0]
 d = int(lines[1])
 
-with open("/home/iz-user/Downloads/res_ba1n.txt", "w", encoding="utf-8") as f:
+with open(input(), "w") as f:
     for kmer in neighbors(dna, d):
         f.write(kmer)
         f.write("\n")

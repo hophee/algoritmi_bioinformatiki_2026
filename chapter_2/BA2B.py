@@ -56,5 +56,5 @@ dna = lines[1:]
 
 result = median_string(dna, k)
 
-with open("res_ba2b.txt", "w") as f:
+with open("results_store/res_ba2b.txt", "w") as f:
     f.write(result)

@@ -40,5 +40,5 @@ for i, nuc in enumerate(alphabet):
 
 result = profile_most_probable_kmer(text, k, profile)
 
-with open("res_ba2c.txt", "w") as f:
+with open("results_store/res_ba2c.txt", "w") as f:
     f.write(result)

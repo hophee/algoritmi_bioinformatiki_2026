@@ -55,5 +55,5 @@ dna = lines[2:]
 
 result = motif_enumeration(dna, k, d)
 
-with open("res_ba2a.txt", "w") as f:
+with open("results_store/res_ba2a.txt", "w") as f:
     f.write(" ".join(sorted(result)))

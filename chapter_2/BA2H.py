@@ -29,5 +29,5 @@ dna     = lines[1].strip().split()
 
 result = distance_between_pattern_and_strings(pattern, dna)
 
-with open("res_ba2h.txt", "w") as f:
+with open("results_store/res_ba2h.txt", "w") as f:
     f.write(str(result))

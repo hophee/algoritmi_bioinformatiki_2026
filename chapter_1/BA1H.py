@@ -24,6 +24,6 @@ res = []
 for i in range(L - k + 1):
     if hamming_dist(pattern, dna_string[i:i + k]) <= d: res.append(i)
 
-with open("/home/iz-user/Downloads/res_ba1h.txt", "w") as f:
+with open(input(), "w") as f:
     f.write(" ".join(map(str, res)))
     f.write("\n")

@@ -13,5 +13,5 @@ for s in string:
 
 comp_reverse = ''.join(comp[::-1])
 
-with open("BA1C_res.txt", "w") as f:
+with open("results_store/BA1C_res.txt", "w") as f:
     f.write(comp_reverse)

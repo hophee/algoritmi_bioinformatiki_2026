@@ -2,7 +2,6 @@
 # rosalind.info/problems/ba2a/
 alphabet = ('A', 'C', 'G', 'T')
 
-
 def hamming_dist(s1, s2):
     ham_dist = 0
     for i in range(len(s1)):

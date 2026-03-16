@@ -1,3 +1,5 @@
+*Описание решений оставшихся для сдачи заадач BA2E-F-G. Код всех решённых задач из второй главы лежит в [директории](https://github.com/hophee/algoritmi_bioinformatiki_2026/tree/main/chapter_2) этого же репозитория.*
+
 # [BA2E](https://rosalind.info/problems/ba2e/) — GreedyMotifSearch with Pseudocounts
 
 ## Принцип алгоритма

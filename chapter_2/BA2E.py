@@ -12,14 +12,14 @@ def hamming_dist(s1, s2):
 
 
 def pr_kmer(kmer, profile):
-    p = 1.0
+    p = 1.0 # вероятность 0-мера
     for j, nuc in enumerate(kmer):
         p *= profile[nuc][j]
     return p
 
 
 def profile_most_probable_kmer(text, k, profile):
-    best_prob = -1
+    best_prob = -1 # невозможная стартовая отрицательная вероятсность
     best_kmer = text[:k]
     for i in range(len(text) - k + 1):
         kmer = text[i:i+k]

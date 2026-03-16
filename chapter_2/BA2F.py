@@ -53,11 +53,11 @@ def score(motifs):
         score_val += t - max_count
     return score_val
 
-
+# t не нужен здесь на самом деле, можно просто посчитать len(seq)
 def randomized_motif_search(dna, k, t):
     motifs = []
     for seq in dna:
-        start = random.randint(0, len(seq) - k)
+        start = random.randint(0, t - k)
         motifs.append(seq[start:start + k])
 
     best_motifs = motifs[:]

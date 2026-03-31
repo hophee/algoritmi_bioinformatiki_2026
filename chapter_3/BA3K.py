@@ -5,12 +5,10 @@ filename = input()
 with open(filename) as f:
     kmers = f.read().split()
 
-# Граф де Брёйна
 graph = {}
 for kmer in kmers:
     graph.setdefault(kmer[:-1], []).append(kmer[1:])
 
-# Степени
 out_deg = {v: len(graph[v]) for v in graph}
 in_deg  = {}
 for v in graph:
@@ -30,7 +28,6 @@ def path_to_string(path):
 
 contigs = []
 
-# Maximal non-branching paths из ветвящихся узлов
 visited_edges = set()
 for v in all_nodes:
     if not is_one_in_one_out(v) and out_deg[v] > 0:
@@ -43,7 +40,6 @@ for v in all_nodes:
                 visited_edges.add((path[-2], w))
             contigs.append(path_to_string(path))
 
-# Изолированные циклы (все узлы 1-in-1-out)
 for v in all_nodes:
     if is_one_in_one_out(v) and (v, graph[v][0]) not in visited_edges:
         w    = graph[v][0]

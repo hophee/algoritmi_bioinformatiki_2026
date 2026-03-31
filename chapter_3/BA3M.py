@@ -27,7 +27,6 @@ def is_one_in_one_out(v):
 paths = []
 visited_edges = set()
 
-# Пути из ветвящихся узлов
 for v in all_nodes:
     if not is_one_in_one_out(v) and out_deg[v] > 0:
         for w in graph[v]:
@@ -39,7 +38,6 @@ for v in all_nodes:
                 visited_edges.add((path[-2], w))
             paths.append(path)
 
-# Изолированные циклы
 for v in all_nodes:
     if is_one_in_one_out(v) and (v, graph[v][0]) not in visited_edges:
         w    = graph[v][0]

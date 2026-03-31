@@ -25,14 +25,11 @@ for v in all_nodes:
     out_deg.setdefault(v, 0)
     in_deg.setdefault(v, 0)
 
-# start (out - in = 1), end (in - out = 1)
 start = next(v for v in all_nodes if out_deg[v] - in_deg[v] == 1)
 end   = next(v for v in all_nodes if in_deg[v]  - out_deg[v] == 1)
 
-# Временное ребро → Эйлеров цикл
 graph.setdefault(end, []).append(start)
 
-# Хирхольцер
 stack = [start]
 cycle = []
 while stack:
@@ -53,7 +50,7 @@ bottom = path[0][1] + "".join(node[1][-1] for node in path[1:])
 
 for i in range(k + d, len(top)):
     if top[i] != bottom[i - k - d]:
-        raise ValueError("there is no string spelled by the gapped patterns")
+        raise ValueError("Such string doesn't exist")
 
 genome = top + bottom[len(top) - (k + d):]
 

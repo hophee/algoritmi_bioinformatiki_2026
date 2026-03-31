@@ -13,7 +13,7 @@ bottom = pairs[0][1] + "".join(p[1][-1] for p in pairs[1:])
 
 for i in range(k + d, len(top)):
     if top[i] != bottom[i - k - d]:
-        raise ValueError("there is no string spelled by the gapped patterns")
+        raise ValueError("Such string doesn't exist")
 
 genome = top + bottom[len(top) - (k + d):]
 

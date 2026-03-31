@@ -5,7 +5,7 @@ filename = input()
 with open(filename) as f:
     lines = f.read().strip().split("\n")
 
-k     = int(lines[0])
+k = int(lines[0])
 kmers = lines[1:]
 
 graph = {}

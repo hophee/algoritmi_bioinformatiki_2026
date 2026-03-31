@@ -3,7 +3,7 @@
 
 filename = input()
 with open(filename) as f:
-    k = f.read().split()
+    k = f.read()
 k = int(k)  
 
 

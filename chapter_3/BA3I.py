@@ -4,16 +4,12 @@
 filename = input()
 with open(filename) as f:
     k = f.read()
-k = int(k)  
+k = int(k)
 
+nodes = [bin(i)[2:].zfill(k - 1) for i in range(2 ** (k - 1))]
+graph = {node: [node[1:] + "0", node[1:] + "1"] for node in nodes}
 
-kmers = [bin(i)[2:].zfill(k) for i in range(2**k)]
-
-graph = {}
-for kmer in kmers:
-    graph.setdefault(kmer[:-1], []).append(kmer[1:])
-
-stack = [next(iter(graph))]
+stack = [nodes[0]]
 cycle = []
 while stack:
     v = stack[-1]

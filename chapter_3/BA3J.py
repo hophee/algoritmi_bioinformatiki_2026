@@ -51,6 +51,9 @@ for i in range(len(cycle) - 1):
 top    = path[0][0] + "".join(node[0][-1] for node in path[1:])
 bottom = path[0][1] + "".join(node[1][-1] for node in path[1:])
 
+for i in range(k + d, len(top)):
+    if top[i] != bottom[i - k - d]:
+        raise ValueError("there is no string spelled by the gapped patterns")
 
 genome = top + bottom[len(top) - (k + d):]
 

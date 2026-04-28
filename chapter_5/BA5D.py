@@ -30,11 +30,11 @@ for node in all_nodes:
     in_deg.setdefault(node, 0)
     graph.setdefault(node, [])
 
-# Топологическая сортировка (алгоритм Кана) — без deque, список + указатель
+# Топологическая сортировка (алгоритм Кана)
 queue   = [v for v in all_nodes if in_deg[v] == 0]
 deg_tmp = dict(in_deg)
 topo    = []
-head    = 0               # указатель вместо pop(0)
+head    = 0
 
 while head < len(queue):
     u = queue[head]

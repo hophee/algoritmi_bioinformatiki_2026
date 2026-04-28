@@ -27,6 +27,7 @@ m, n = len(s1), len(s2)
 dp   = [[0] * (n + 1) for _ in range(m + 1)]
 back = [[None] * (n + 1) for _ in range(m + 1)]
 
+#Нидлмэн-Вуншпунш
 for i in range(1, m + 1):
     dp[i][0]   = -i * sigma
     back[i][0] = 'up'
@@ -43,18 +44,18 @@ for i in range(1, m + 1):
         best = max(match, delete, insert)
         dp[i][j] = best
 
-        if   best == match:  back[i][j] = 'diag'
-        elif best == delete: back[i][j] = 'up'
-        else:                back[i][j] = 'left'
+        if   best == match:  back[i][j] = 'd'
+        elif best == delete: back[i][j] = 'u'
+        else:                back[i][j] = 'l'
 
 a1, a2 = [], []
 i, j = m, n
 
 while i > 0 or j > 0:
-    if back[i][j] == 'diag':
+    if back[i][j] == 'd':
         a1.append(s1[i-1]); a2.append(s2[j-1])
         i -= 1; j -= 1
-    elif back[i][j] == 'up':
+    elif back[i][j] == 'u':
         a1.append(s1[i-1]); a2.append('-')
         i -= 1
     else:

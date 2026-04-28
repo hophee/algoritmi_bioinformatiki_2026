@@ -24,7 +24,7 @@ for node in all_nodes:
     in_deg.setdefault(node, 0)
     graph.setdefault(node, [])
 
-# Алгоритм Кана (BFS-топосортировка)
+# Алгоритм Кана
 queue = [v for v in sorted(all_nodes) if in_deg[v] == 0]
 topo  = []
 head  = 0

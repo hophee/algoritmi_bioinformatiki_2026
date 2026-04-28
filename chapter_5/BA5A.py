@@ -5,11 +5,9 @@ filename = input()
 with open(filename) as f:
     lines = f.read().strip().split("\n")
 
-# Формат входа: первая строка — money, вторая — номиналы через запятую
 money = int(lines[0])
 coins = list(map(int, lines[1].split(",")))
 
-# dp[m] = минимальное число монет для суммы m
 dp = [float('inf')] * (money + 1)
 dp[0] = 0
 

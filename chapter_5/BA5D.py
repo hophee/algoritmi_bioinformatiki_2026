@@ -45,7 +45,6 @@ while head < len(queue):
         if deg_tmp[v] == 0:
             queue.append(v)
 
-# ДП по топологическому порядку
 NEG_INF = float('-inf')
 dp      = {v: NEG_INF for v in all_nodes}
 back    = {v: None    for v in all_nodes}
@@ -59,7 +58,6 @@ for u in topo:
             dp[v]   = dp[u] + w
             back[v] = u
 
-# Восстановление пути
 path = []
 node = sink
 while node is not None:
